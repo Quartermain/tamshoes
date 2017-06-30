@@ -335,7 +335,8 @@ small.yith-wcmv-suborder-owner:not(.single-order) {
     border: none;
 }
 
-#vendor-details input[type=text] {
+#vendor-details input[type=text],
+#vendor-details input[type=number] {
   width: 40%;
   margin-bottom: 10px;
 }
@@ -598,11 +599,111 @@ span.vacation-date-field {
     display: none;
 }
 
+
+/* shipping */
+
+.vendor_limited_access.woocommerce.toplevel_page_yith_vendor_settings .wc-backbone-modal .wc-backbone-modal-content {
+    width: initial;
+}
+
+.yith-wpv-shipping-methods-add.add_shipping_method{
+    position: relative;
+}
+
+.yith-vendor-admin-wrap .yith_admin_vendor_shipping .form-field span.description {
+    display: block;
+}
+
+.yith-vendor-admin-wrap .yith_admin_vendor_shipping .form-field.checkbox span.description {
+    display: inline-block;
+}
+
+.yith-vendor-admin-wrap .yith_admin_vendor_shipping .button-secondary {
+     float: right;
+}
+
+.vendor_limited_access.woocommerce.toplevel_page_yith_vendor_settings .yith-wpv-shipping-method-form-container {
+    display: none;
+}
+
+.yith-vendor-admin-wrap .wc-shipping-zone-postcodes {
+    display: none;
+    margin-top: 10px;
+}
+
+.vendor_limited_access.woocommerce.toplevel_page_yith_vendor_settings .wc-shipping-zone-method-remove {
+    display: inline-block;
+    width: 14px;
+    height: 13px;
+    background-repeat: no-repeat;
+    background-image: url(../images/remove_shipping_method.png);
+    margin: 0 5px;
+    margin-bottom: -1px;
+    cursor: pointer;
+}
+
+.vendor_limited_access.woocommerce.toplevel_page_yith_vendor_settings .wc-backbone-modal-edit-shipping-mode .woocommerce-help-tip,
+.vendor_limited_access.woocommerce.toplevel_page_yith_vendor_settings .wc-backbone-modal-edit-shipping-mode .select2-container {
+    display: none !important;
+}
+
+.vendor_limited_access.woocommerce.toplevel_page_yith_vendor_settings .wc-backbone-modal-edit-shipping-mode select {
+    display: block !important;
+    width: 100%;
+}
+
+.vendor_limited_access.woocommerce.toplevel_page_yith_vendor_settings .yith-wpdv-wc-shipping-zone-postcodes-toggle {
+    display: inline-block;
+}
+
+.vendor_limited_access.woocommerce.toplevel_page_yith_vendor_settings table.wc-shipping-classes td.wc-shipping-zone-methods ul li::before,
+.vendor_limited_access.woocommerce.toplevel_page_yith_vendor_settings table.wc-shipping-zone-methods td.wc-shipping-zone-methods ul li::before,
+.vendor_limited_access.woocommerce.toplevel_page_yith_vendor_settings table.wc-shipping-zones td.wc-shipping-zone-methods ul li::before {
+    content: "";
+}
+
+.vendor_limited_access.woocommerce.toplevel_page_yith_vendor_settings table.wc-shipping-classes td.wc-shipping-zone-methods ul li,
+.vendor_limited_access.woocommerce.toplevel_page_yith_vendor_settings table.wc-shipping-zone-methods td.wc-shipping-zone-methods ul li,
+.vendor_limited_access.woocommerce.toplevel_page_yith_vendor_settings table.wc-shipping-zones td.wc-shipping-zone-methods ul li {
+    margin-left: 5px;
+    display: block;
+}
+
+h2.commission-details-shipping:before{
+    display: inline-block;
+    width:30px;
+    height:23px;
+    background-image: url(../images/vendor-shipping-fee.png);
+    background-repeat: no-repeat;
+    content: '';
+    margin:-3px 10px -3px 0;
+}
+
+h2.commission-details-product:before{
+    display: inline-block;
+    width:30px;
+    height:23px;
+    background-image: url(../images/vendor-commission-fee.png);
+    background-repeat: no-repeat;
+    content: '';
+    margin:-3px 10px -3px 0;
+}
+
+/* === Edit Vendor === */
+label[for=yith_vendor_social_live-chat] small em {
+    font-weight: bold;
+}
+
+label[for=yith_vendor_social_live-chat] small {
+    font-weight: 400;
+}
+
 /* WC 2.7 fix */
 .woocommerce.toplevel_page_yith_vendor_commissions .form-field .select2-container,
 .post-type-product.taxonomy-yith_shop_vendor .form-field .select2-container {
     width: 100%!important;
 }
+
 
 /* Responsive */
 @media (max-width: 1200px) {
@@ -613,7 +714,8 @@ span.vacation-date-field {
 
 @media screen and (max-width: 782px) {
     #s2id_yith_vendor_admins,
-    #vendor-details input[type=text] {
+    #vendor-details input[type=text],
+    #vendor-details input[type=number] {
         width: 100%;
     }
 }

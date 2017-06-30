@@ -12,21 +12,25 @@
  * @var YITH_Commission $commission
  */
 
-$order    = $commission->get_order();
-$user     = $commission->get_user();
-$vendor   = $commission->get_vendor();
-$product  = $commission->get_product();
-$item     = $commission->get_item();
-$item_id  = $commission->line_item_id;
-$tax_data = empty( $legacy_order ) && wc_tax_enabled() ? maybe_unserialize( isset( $item['line_tax_data'] ) ? $item['line_tax_data'] : '' ) : false;
-$order_taxes = $order->get_taxes();
+//string added @version 1.14.1 - ALL FILE
+$order               = $commission->get_order();
+$user                = $commission->get_user();
+$vendor              = $commission->get_vendor();
+$product             = $commission->get_product();
+$item                = $commission->get_item();
+$item_id             = $commission->line_item_id;
+$tax_data            = empty( $legacy_order ) && wc_tax_enabled() ? maybe_unserialize( isset( $item['line_tax_data'] ) ? $item['line_tax_data'] : '' ) : false;
+$order_taxes         = $order->get_taxes();
+$back_url = isset( $back_url ) ? $back_url : remove_query_arg( 'view' );
+$line_items_shipping = $order->get_items( 'shipping' );
+$currency            = array( 'currency' => yith_wcmv_get_order_currency( $order ) );
 
 ?>
 
 <div class="wrap">
 	<h2>
 		<?php _e( 'View Commission', 'yith-woocommerce-product-vendors' ) ?>
-		<a href="<?php echo esc_url( remove_query_arg( 'view' ) ) ?>" class="add-new-h2"><?php _e( 'Back', 'yith-woocommerce-product-vendors' ) ?></a>
+		<a href="<?php echo apply_filters( 'yith_wcmv_back_to_commissions_list_url', esc_url( $back_url ) ) ?>" class="add-new-h2"><?php _e( 'Back', 'yith-woocommerce-product-vendors' ) ?></a>
 	</h2>
 
 	<?php YITH_Commissions()->admin_notice(); ?>
@@ -99,8 +103,11 @@ $order_taxes = $order->get_taxes();
 
 							<div class="panel-wrap woocommerce">
 								<div id="order_data" class="yith-commission panel">
-									<h2><?php printf( __( 'Commission %s Details', 'yith-woocommerce-product-vendors' ), '#' . $commission->id ) ?></h2>
-									<p class="order_number">
+									<h2 class="commission-details-<?php echo $commission->type ?>">
+                                        <?php $commission_title_label = 'product' == $commission->type ? _x( 'Commission', '[admin] part of commission details', 'yith-woocommerce-product-vendors' ) : _x( 'Shipping fee', '[admin] part of shipping fee details', 'yith-woocommerce-product-vendors' ); ?>
+                                        <?php printf( '%s #%s %s', $commission_title_label, $commission->id, _x( 'details', '[admin] part of commission details', 'yith-woocommerce-product-vendors' ) ); ?>
+                                    </h2>
+                                    <p class="order_number">
 										<?php
 										$user_info = $commission->get_user();
 
@@ -135,7 +142,7 @@ $order_taxes = $order->get_taxes();
 
                                         $order_id        = yit_get_prop( $order, 'id' );
                                         $order_number    = '<strong>#' . esc_attr( $order->get_order_number() ) . '</strong>';
-                                        $order_uri       = sprintf( '<a href="%s">#%d</a>', 'post.php?post=' . absint( $order_id ) . '&action=edit', $order->get_order_number() );
+                                        $order_uri       = sprintf( '<a href="%s">#%d</a>', apply_filters( 'yith_wcmv_commission_get_order_uri', 'post.php?post=' . absint( $order_id ) . '&action=edit', $order_id, $order ), $order->get_order_number() );
                                         $order_info      = $vendor->is_super_user() ? $order_uri : $order_number;
 
                                         if( $vendor->is_super_user() ){
@@ -282,16 +289,17 @@ $order_taxes = $order->get_taxes();
 
 						</div>
 					</div>
+                    <div id="woocommerce-order-items" class="postbox">
+                        <h3 class="hndle ui-sortable-handle"><span><?php _e( 'Item data', 'yith-woocommerce-product-vendors' ) ?></span></h3>
+                        <div class="inside">
 
-					<div id="woocommerce-order-items" class="postbox">
-						<h3 class="hndle ui-sortable-handle"><span><?php _e( 'Item data', 'yith-woocommerce-product-vendors' ) ?></span></h3>
-						<div class="inside">
+                            <div class="woocommerce_order_items_wrapper wc-order-items-editable">
+                                <table cellpadding="0" cellspacing="0" class="woocommerce_order_items">
 
-							<div class="woocommerce_order_items_wrapper wc-order-items-editable">
-								<table cellpadding="0" cellspacing="0" class="woocommerce_order_items">
-									<thead>
-										<tr>
-											<th class="item sortable" colspan="2"><?php _e( 'Item', 'woocommerce' ) ?></th>
+                                    <?php if ( 'product' == $commission->type ) : ?>
+                                        <thead>
+                                        <tr>
+                                            <th class="item sortable" colspan="2"><?php _e( 'Item', 'woocommerce' ) ?></th>
                                             <?php do_action( 'yith_wcmv_admin_order_item_headers', $order, $item, $item_id ); ?>
                                             <th class="item_cost sortable"><?php _e( 'Cost', 'woocommerce' ) ?></th>
                                             <th class="quantity sortable"><?php _e( 'Qty', 'woocommerce' ) ?></th>
@@ -313,47 +321,49 @@ $order_taxes = $order->get_taxes();
                                                 endforeach;
                                             endif;
                                             ?>
-										</tr>
-									</thead>
+                                        </tr>
+                                        </thead>
 
-									<tbody id="order_line_items">
-										<tr class="item Zero Rate" data-order_item_id="<?php echo $item_id ?>">
+                                        <tbody id="order_line_items">
+                                        <tr class="item Zero Rate" data-order_item_id="<?php echo $item_id ?>">
 
 											<td class="thumb">
+                                                <?php $product_id = $product_uri = ''; ?>
 												<?php if ( $product ) : ?>
                                                     <?php $product_id = yit_get_prop( $product, 'id' ); ?>
-													<a href="<?php echo esc_url( admin_url( 'post.php?post=' . absint( $product_id ) . '&action=edit' ) ); ?>" class="tips" data-tip="<?php
+                                                    <?php $product_uri = apply_filters( 'yith_wcmv_commission_get_product_uri', admin_url( 'post.php?post=' . absint( $product_id ) . '&action=edit' ), $product_id ); ?>
+													<a href="<?php echo esc_url( $product_uri ); ?>" class="tips" data-tip="<?php
 
-													echo '<strong>' . __( 'Product ID:', 'woocommerce' ) . '</strong> ' . absint( $item['product_id'] );
+                                                    echo '<strong>' . __( 'Product ID:', 'woocommerce' ) . '</strong> ' . absint( $item['product_id'] );
 
-													if ( $item['variation_id'] && 'product_variation' === get_post_type( $item['variation_id'] ) ) {
-														echo '<br/><strong>' . __( 'Variation ID:', 'woocommerce' ) . '</strong> ' . absint( $item['variation_id'] );
-													} elseif ( $item['variation_id'] ) {
-														echo '<br/><strong>' . __( 'Variation ID:', 'woocommerce' ) . '</strong> ' . absint( $item['variation_id'] ) . ' (' . __( 'No longer exists', 'woocommerce' ) . ')';
-													}
+                                                    if ( $item['variation_id'] && 'product_variation' === get_post_type( $item['variation_id'] ) ) {
+                                                        echo '<br/><strong>' . __( 'Variation ID:', 'woocommerce' ) . '</strong> ' . absint( $item['variation_id'] );
+                                                    } elseif ( $item['variation_id'] ) {
+                                                        echo '<br/><strong>' . __( 'Variation ID:', 'woocommerce' ) . '</strong> ' . absint( $item['variation_id'] ) . ' (' . __( 'No longer exists', 'woocommerce' ) . ')';
+                                                    }
 
-													if ( $product && $product->get_sku() ) {
-														echo '<br/><strong>' . __( 'Product SKU:', 'woocommerce' ).'</strong> ' . esc_html( $product->get_sku() );
-													}
+                                                    if ( $product && $product->get_sku() ) {
+                                                        echo '<br/><strong>' . __( 'Product SKU:', 'woocommerce' ).'</strong> ' . esc_html( $product->get_sku() );
+                                                    }
                                                     //TODO: Testare
-													$variation_data = $product->get_attributes();
+                                                    $variation_data = $product->get_attributes();
 
-													if ( $product && isset( $variation_data ) ) {
-														echo '<br/>' . wc_get_formatted_variation( $variation_data, true );
-													}
+                                                    if ( $product && isset( $variation_data ) ) {
+                                                        echo '<br/>' . wc_get_formatted_variation( $variation_data, true );
+                                                    }
 
-													?>"><?php echo $product->get_image( 'shop_thumbnail', array( 'title' => '' ) ); ?></a>
-												<?php else : ?>
-													<?php echo wc_placeholder_img( 'shop_thumbnail' ); ?>
-												<?php endif; ?>
-											</td>
+                                                    ?>"><?php echo $product->get_image( 'shop_thumbnail', array( 'title' => '' ) ); ?></a>
+                                                <?php else : ?>
+                                                    <?php echo wc_placeholder_img( 'shop_thumbnail' ); ?>
+                                                <?php endif; ?>
+                                            </td>
 
-											<td class="name">
+                                            <td class="name">
 
-												<?php echo ( $product && $product->get_sku() ) ? esc_html( $product->get_sku() ) . ' &ndash; ' : ''; ?>
+                                                <?php echo ( $product && $product->get_sku() ) ? esc_html( $product->get_sku() ) . ' &ndash; ' : ''; ?>
 
 												<?php if ( $product ) : ?>
-													<a target="_blank" href="<?php echo esc_url( admin_url( 'post.php?post=' . absint( $product_id ) . '&action=edit' ) ); ?>">
+													<a target="_blank" href="<?php echo esc_url( $product_uri ); ?>">
 														<?php echo esc_html( $item['name'] ); ?>
 													</a>
 												<?php else : ?>
@@ -365,7 +375,7 @@ $order_taxes = $order->get_taxes();
                                                     $metadata = false;
 
                                                     if( YITH_Vendors()->is_wc_2_7_or_greather ){
-                                                        $metadata = $item->get_meta_data();
+                                                        $metadata = ! empty( $item ) ? $item->get_meta_data() : null;
                                                     }
 
                                                     else {
@@ -415,24 +425,22 @@ $order_taxes = $order->get_taxes();
                                                     }
                                                     ?>
                                                 </div>
-											</td>
+                                            </td>
 
                                             <?php do_action( 'yith_wcmv_admin_order_item_values', $product, $item, absint( $item_id ) ); ?>
 
-											<td class="item_cost" width="1%">
-												<div class="view">
-													<?php
-                                                    $currency = array( 'currency' => yith_wcmv_get_order_currency( $order ) );
-
-													if ( isset( $item['line_total'] ) ) {
-														if ( isset( $item['line_subtotal'] ) && $item['line_subtotal'] != $item['line_total'] ) {
-															echo '<del>' . wc_price( $order->get_item_subtotal( $item, false, true ), $currency ) . '</del> ';
-														}
-														echo wc_price( $order->get_item_total( $item, false, true ), $currency );
-													}
-													?>
-												</div>
-											</td>
+                                            <td class="item_cost" width="1%">
+                                                <div class="view">
+                                                    <?php
+                                                    if ( isset( $item['line_total'] ) ) {
+                                                        if ( isset( $item['line_subtotal'] ) && $item['line_subtotal'] != $item['line_total'] ) {
+                                                            echo '<del>' . wc_price( $order->get_item_subtotal( $item, false, true ), $currency ) . '</del> ';
+                                                        }
+                                                        echo wc_price( $order->get_item_total( $item, false, true ), $currency );
+                                                    }
+                                                    ?>
+                                                </div>
+                                            </td>
 
                                             <td class="quantity" width="1%">
                                                 <div class="view">
@@ -509,50 +517,51 @@ $order_taxes = $order->get_taxes();
                                                 }
                                             }
                                             ?>
-										</tr>
-									</tbody>
+                                        </tr>
+                                        </tbody>
+                                    <?php endif; ?>
 
-									<tbody id="order_refunds">
-										<?php foreach ( $commission->get_refunds() as $refund_id => $amount ) : $refund = new WC_Order_Refund( $refund_id ) ?>
-										<tr class="refund Zero Rate">
-											<td class="thumb"><div></div></td>
+                                    <tbody id="order_refunds">
+                                    <?php foreach ( $commission->get_refunds() as $refund_id => $amount ) : $refund = new WC_Order_Refund( $refund_id ) ?>
+                                        <tr class="refund Zero Rate">
+                                            <td class="thumb"><div></div></td>
 
-											<td class="name">
+                                            <td class="name">
                                                 <?php $refund_reason = YITH_Vendors()->is_wc_2_7_or_greather ? 'refund_reason' : 'get_refund_reasons'; ?>
-												<?php echo esc_attr__( 'Refund', 'woocommerce' ) . ' #' . absint( yit_get_prop( $refund, 'id' ) ) . ' - ' . esc_attr( date_i18n( get_option( 'date_format' ) . ', ' . get_option( 'time_format' ), yit_get_prop( $refund, 'date_created' ) ) );  ?>
-												<?php if ( $refund->$refund_reason() ) : ?>
-													<p class="description"><?php echo esc_html( $refund->$refund_reason() ); ?></p>
-												<?php endif; ?>
-											</td>
+                                                <?php echo esc_attr__( 'Refund', 'woocommerce' ) . ' #' . absint( yit_get_prop( $refund, 'id' ) ) . ' - ' . esc_attr( date_i18n( get_option( 'date_format' ) . ', ' . get_option( 'time_format' ), yit_get_prop( $refund, 'date_created' ) ) );  ?>
+                                                <?php if ( $refund->$refund_reason() ) : ?>
+                                                    <p class="description"><?php echo esc_html( $refund->$refund_reason() ); ?></p>
+                                                <?php endif; ?>
+                                            </td>
 
-											<td class="quantity" width="1%">&nbsp;</td>
+                                            <td class="quantity" width="1%">&nbsp;</td>
 
-											<td class="line_cost" width="1%">
-												<div class="view">
-													<?php echo wc_price( $amount ) ?>
-												</div>
-											</td>
+                                            <td class="line_cost" width="1%">
+                                                <div class="view">
+                                                    <?php echo wc_price( $amount ) ?>
+                                                </div>
+                                            </td>
 
-											<td class="line_tax" width="1%"></td>
-										</tr>
-										<?php endforeach; ?>
-									</tbody>
+                                            <td class="line_tax" width="1%"></td>
+                                        </tr>
+                                    <?php endforeach; ?>
+                                    </tbody>
 
-								</table>
-							</div>
+                                </table>
+                            </div>
 
-							<div class="wc-order-data-row wc-order-totals-items wc-order-items-editable">
+                            <div class="wc-order-data-row wc-order-totals-items wc-order-items-editable">
 
-								<?php
-								$coupons = $order->get_items( array( 'coupon' ) );
-								if ( $coupons ) {
-									?>
-									<div class="wc-used-coupons">
-										<ul class="wc_coupon_list"><?php
-											echo '<li><strong>' . __( 'Coupon(s) Used', 'woocommerce' ) . '</strong></li>';
-											foreach ( $coupons as $item_id => $item ) {
-												global $wpdb;
-												$post_id = $wpdb->get_var( $wpdb->prepare( "SELECT ID FROM {$wpdb->posts} WHERE post_title = %s AND post_type = 'shop_coupon' AND post_status = 'publish' LIMIT 1;", $item['name'] ) );
+                                <?php
+                                $coupons = $order->get_items( array( 'coupon' ) );
+                                if ( $coupons ) {
+                                    ?>
+                                    <div class="wc-used-coupons">
+                                        <ul class="wc_coupon_list"><?php
+                                            echo '<li><strong>' . __( 'Coupon(s) Used', 'woocommerce' ) . '</strong></li>';
+                                            foreach ( $coupons as $item_id => $item ) {
+                                                global $wpdb;
+                                                $post_id = $wpdb->get_var( $wpdb->prepare( "SELECT ID FROM {$wpdb->posts} WHERE post_title = %s AND post_type = 'shop_coupon' AND post_status = 'publish' LIMIT 1;", $item['name'] ) );
 
                                                 $link_before = $link_after = '';
                                                 if ( current_user_can( 'manage_woocommerce' ) ) {
@@ -561,52 +570,64 @@ $order_taxes = $order->get_taxes();
                                                     $link_after = '</a>';
                                                 }
 
-												printf( '<li class="code">%s<span>' . esc_html( $item['name'] ). '</span>%s</li>', $link_before, $link_after );
-											}
-											?></ul>
-									</div>
-								<?php
-								}
-								?>
+                                                printf( '<li class="code">%s<span>' . esc_html( $item['name'] ). '</span>%s</li>', $link_before, $link_after );
+                                            }
+                                            ?></ul>
+                                    </div>
+                                    <?php
+                                }
+                                ?>
 
-								<table class="wc-order-totals">
-									<tbody>
+                                <table class="wc-order-totals">
+                                    <tbody>
 
-										<tr>
-											<td class="label"><?php _e( 'Rate', 'yith-woocommerce-product-vendors' ) ?>:</td>
-											<td class="total"><?php echo $commission->get_rate( 'display' ) ?></td>
-											<td width="1%"></td>
-										</tr>
+                                    <tr>
+                                        <td class="label"><?php _e( 'Rate', 'yith-woocommerce-product-vendors' ) ?>:</td>
+                                        <td class="total"><?php echo $commission->get_rate( 'display' ) ?></td>
+                                        <td width="1%"></td>
+                                    </tr>
 
-										<tr>
-											<td class="label"><?php _e( 'Commission', 'yith-woocommerce-product-vendors' ) ?>:</td>
-											<td class="total">
-												<?php echo str_replace( array( '<span class="amount">', '</span>' ), '', wc_price( $commission->get_amount() + abs( $commission->get_refund_amount() ), $currency ) ) ?>
-											</td>
-											<td width="1%"></td>
-										</tr>
+                                    <tr>
+                                        <?php $commission_label = '';
 
-                                        <?php if ( $commission->get_refunds() ) : ?>
-										<tr>
-											<td class="label refunded-total"><?php printf( '%s:', __( 'Refunded', 'yith-woocommerce-product-vendors' ) ) ?></td>
-											<td class="total refunded-total"><?php echo $commission->get_refund_amount( 'display' ) ?></td>
-											<td width="1%"></td>
-										</tr>
-                                        <?php endif; ?>
+                                        if( 'product' == $commission->type ){
+                                            $commission_label = __( 'Commission', 'yith-woocommerce-product-vendors' );
+                                        }
 
-										<tr>
-											<td class="label"><?php printf( '%s:', __( 'Total', 'yith-woocommerce-product-vendors' ) ); ?></td>
-											<td class="total"><?php echo $commission->get_amount( 'display', $currency ) ?></td>
-											<td width="1%"></td>
-										</tr>
+                                        elseif( 'shipping' == $commission->type  ) {
+                                            $shipping_method = isset( $line_items_shipping[ $commission->line_item_id ] ) ? $line_items_shipping[ $commission->line_item_id ] : null;
+                                            if( ! empty( $shipping_method ) ){
+                                                /** @var $shipping_method WC_Order_Item_Shipping */
+                                                $commission_label = $shipping_method->get_name();
+                                            }
+                                        } ?>
+                                        <td class="label"><?php echo $commission_label; ?>:</td>
+                                        <td class="total">
+                                            <?php echo str_replace( array( '<span class="amount">', '</span>' ), '', wc_price( $commission->get_amount() + abs( $commission->get_refund_amount() ), $currency ) ) ?>
+                                        </td>
+                                        <td width="1%"></td>
+                                    </tr>
 
-									</tbody>
-								</table>
-								<div class="clear"></div>
-							</div>
+                                    <?php if ( $commission->get_refunds() ) : ?>
+                                        <tr>
+                                            <td class="label refunded-total"><?php printf( '%s:', __( 'Refunded', 'yith-woocommerce-product-vendors' ) ) ?></td>
+                                            <td class="total refunded-total"><?php echo $commission->get_refund_amount( 'display' ) ?></td>
+                                            <td width="1%"></td>
+                                        </tr>
+                                    <?php endif; ?>
 
-						</div>
-					</div>
+                                    <tr>
+                                        <td class="label"><?php printf( '%s:', __( 'Total', 'yith-woocommerce-product-vendors' ) ); ?></td>
+                                        <td class="total"><?php echo $commission->get_amount( 'display', $currency ) ?></td>
+                                        <td width="1%"></td>
+                                    </tr>
+
+                                    </tbody>
+                                </table>
+                                <div class="clear"></div>
+                            </div>
+                        </div>
+                    </div>
 				</div>
 			</div>
 

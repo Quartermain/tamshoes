@@ -30,6 +30,7 @@ if ( ! class_exists( 'YITH_Commission' ) ) {
 	 * @property   float $rate The rate commission to assign
 	 * @property   float $amount The amount payed to $user_id
 	 * @property   string $status The status of commission (one between 'pending', 'unpaid' and 'paid')
+	 * @property   string $type The commission type (one between 'product' or 'shipping')
 	 * @property   string $last_edit When was the last update
 	 * @property   string $last_edit_gmt When was the last update
 	 */
@@ -206,7 +207,8 @@ if ( ! class_exists( 'YITH_Commission' ) ) {
 				'vendor_id'     => 0,
 				'rate'          => YITH_Vendors()->get_base_commission(),
 				'amount'        => 0,
-				'status'        => 'pending'
+				'status'        => 'pending',
+                'type'          => 'product'
 			);
 
 			// set commission by vendor

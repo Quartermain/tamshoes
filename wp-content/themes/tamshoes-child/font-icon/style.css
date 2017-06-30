@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'icomoon';
-  src:  url('fonts/icomoon.eot?o7vwdo');
-  src:  url('fonts/icomoon.eot?o7vwdo#iefix') format('embedded-opentype'),
-    url('fonts/icomoon.ttf?o7vwdo') format('truetype'),
-    url('fonts/icomoon.woff?o7vwdo') format('woff'),
-    url('fonts/icomoon.svg?o7vwdo#icomoon') format('svg');
+  src:  url('fonts/icomoon.eot?kknc4z');
+  src:  url('fonts/icomoon.eot?kknc4z#iefix') format('embedded-opentype'),
+    url('fonts/icomoon.ttf?kknc4z') format('truetype'),
+    url('fonts/icomoon.woff?kknc4z') format('woff'),
+    url('fonts/icomoon.svg?kknc4z#icomoon') format('svg');
   font-weight: normal;
   font-style: normal;
 }
@@ -27,15 +27,24 @@
 .tamshoes-icon_bupbe:before {
   content: "\e900";
 }
-.tamshoes-icon_caogot .path1:before {
+.tamshoes-icon_caogot:before {
   content: "\e901";
-  color: rgb(255, 255, 255);
 }
-.tamshoes-icon_caogot .path2:before {
+.tamshoes-icon_dep:before {
   content: "\e902";
-  margin-left: -1em;
-  color: rgb(0, 0, 0);
 }
 .tamshoes-icon_sandan:before {
   content: "\e903";
+}
+.tamshoes-newspaper:before {
+  content: "\e904";
+}
+.tamshoes-bullhorn:before {
+  content: "\e91a";
+}
+.tamshoes-phone:before {
+  content: "\e942";
+}
+.tamshoes-users:before {
+  content: "\e972";
 }

@@ -454,6 +454,7 @@ if ( ! class_exists( 'YITH_Commissions' ) ) {
                         rate decimal(5,4) NOT NULL,
                         amount double(15,4) NOT NULL,
                         status varchar(100) NOT NULL,
+                        type VARCHAR(30) NOT NULL DEFAULT 'product'
                         last_edit DATETIME NOT NULL DEFAULT '000-00-00 00:00:00',
                         last_edit_gmt DATETIME NOT NULL DEFAULT '000-00-00 00:00:00',
                         PRIMARY KEY (ID)
@@ -577,12 +578,6 @@ if ( ! class_exists( 'YITH_Commissions' ) ) {
 				'fields'       => 'ids'
 			);
 
-			foreach ( array( 'order_id', 'vendor_id', 'status', 'paged', 'm', 's', 'orderby', 'order', 'product_id' ) as $key ) {
-				if ( isset( $_REQUEST[ $key ] ) ) {
-					//$default_args[ $key ] = $_REQUEST[ $key ];
-				}
-			}
-
 			$q = wp_parse_args( $q, $default_args );
 
 			// Fairly insane upper bound for search string lengths.
@@ -618,6 +613,9 @@ if ( ! class_exists( 'YITH_Commissions' ) ) {
 			if ( ! empty( $q['vendor_id'] ) ) {
 				$where .= $wpdb->prepare( " AND c.vendor_id = %d", $q['vendor_id'] );
 			}
+            if ( ! empty( $q['type'] ) && 'all' != $q['type'] ) {
+                $where .= $wpdb->prepare( " AND c.type = %s", $q['type'] );
+            }
 			if ( ! empty( $q['status'] ) && 'all' != $q['status'] ) {
 				if ( is_array( $q['status'] ) ) {
 					$q['status'] = implode( "', '", $q['status'] );
@@ -835,8 +833,7 @@ if ( ! class_exists( 'YITH_Commissions' ) ) {
 		 * @since 1.0
 		 */
 		public function register_commissions( $order_id ) {
-
-			// Only process commissions once
+		    // Only process commissions once
 			$processed = get_post_meta( $order_id, '_commissions_processed', true );
 			if ( $processed && $processed == 'yes' ) {
 				return;
@@ -891,7 +888,7 @@ if ( ! class_exists( 'YITH_Commissions' ) ) {
 					$commission_included_tax    = 'yes' == get_option( 'yith_wpv_include_tax', 'no' );
 					$commission_included_coupon = 'yes' == get_option( 'yith_wpv_include_coupon', 'no' );
 
-					if(! empty( $commission_id ) ){
+					if( ! empty( $commission_id ) ){
 					    //Add note to commission to know if the commission have benne calculated included or escluded tax and coupon
 					    $tax    = $commission_included_tax    ? _x( 'included', 'means: Vendor commission have been calculated: tax included', 'yith-woocommerce-product-vendors' ) : _x( 'excluded', 'means: Vendor commission have been calculated: tax excluded', 'yith-woocommerce-product-vendors' );
 					    $coupon = $commission_included_coupon ? _x( 'included', 'means: Vendor commission have been calculated: tax included', 'yith-woocommerce-product-vendors' ) : _x( 'excluded', 'means: Vendor commission have been calculated: tax excluded', 'yith-woocommerce-product-vendors' );
@@ -1031,6 +1028,40 @@ if ( ! class_exists( 'YITH_Commissions' ) ) {
 			}
 		}
 
+		public function register_commissions_status( $order_id, $status ){
+            // Ensure the order have commissions processed
+            $processed = get_post_meta( $order_id, '_commissions_processed', true );
+            $commission_processed = false;
+
+            if ( $processed && $processed == 'yes' ) {
+                $order = wc_get_order( $order_id );
+
+                $commission_ids = array();
+
+                foreach ( $order->get_items() as $item_id => $item ){
+                    if ( ! empty( $item['commission_id'] ) ) {
+                        $commission_ids[] = $item['commission_id'];
+                    }
+                }
+
+                $commission_ids = apply_filters( 'yith_wcmv_register_commissions_status', $commission_ids, $order_id, $status );
+
+                foreach ( $commission_ids as $commission_id ) {
+
+                    $commission_processed = true;
+
+                    // retrieve commission
+                    $commission = YITH_Commission( intval( $commission_id ) );
+
+                    // set commission as unpaid, ready to be paid
+                    $commission->update_status( $status );
+                    $commission->save_data();
+                }
+            }
+
+            return $commission_processed;
+        }
+
 		/**
 		 * Register the commission as unpaid when the order is completed
 		 *
@@ -1039,25 +1070,7 @@ if ( ! class_exists( 'YITH_Commissions' ) ) {
 		 * @since 1.0
 		 */
 		public function register_commissions_unpaid( $order_id ) {
-
-			// Ensure the order have commissions processed
-			$processed = get_post_meta( $order_id, '_commissions_processed', true );
-			if ( $processed && $processed == 'yes' ) {
-				$order = wc_get_order( $order_id );
-
-				foreach ( $order->get_items() as $item_id => $item ) {
-					if ( empty( $item['commission_id'] ) ) {
-						continue;
-					}
-
-					// retrieve commission
-					$commission = YITH_Commission( intval( $item['commission_id'] ) );
-
-					// set commission as unpaid, ready to be paid
-					$commission->update_status( 'unpaid' );
-					$commission->save_data();
-				}
-			}
+		    $this->register_commissions_status( $order_id, 'unpaid' );
 		}
 
 		/**
@@ -1068,30 +1081,15 @@ if ( ! class_exists( 'YITH_Commissions' ) ) {
 		 * @since 1.0
 		 */
 		public function register_commissions_refunded( $order_id ) {
+            $refunded  = get_post_meta( $order_id, '_commissions_refunded', true );
 
-			// Ensure the order have commissions processed
-			$processed = get_post_meta( $order_id, '_commissions_processed', true );
-			$refunded  = get_post_meta( $order_id, '_commissions_refunded', true );
+            if( ( empty( $refunded ) || $refunded != 'no' ) ){
+                $processed = $this->register_commissions_status( $order_id, 'refunded' );
 
-			if ( $processed && $processed == 'yes' && ( empty( $refunded ) || $refunded != 'no' ) ) {
-				$order = wc_get_order( $order_id );
-
-				foreach ( $order->get_items() as $item_id => $item ) {
-					if ( empty( $item['commission_id'] ) ) {
-						continue;
-					}
-
-					// retrieve commission
-					$commission = YITH_Commission( intval( $item['commission_id'] ) );
-
-					// set commission as refunded
-					$commission->update_status( 'refunded' );
-					$commission->save_data();
-
-					// Mark commissions as processed
-					update_post_meta( $order_id, '_commissions_refunded', 'yes' );
-				}
-			}
+                if( $processed ){
+                    update_post_meta( $order_id, '_commissions_refunded', 'yes' );
+                }
+            }
 		}
 
 		/**
@@ -1102,30 +1100,15 @@ if ( ! class_exists( 'YITH_Commissions' ) ) {
 		 * @since 1.0
 		 */
 		public function register_commissions_cancelled( $order_id ) {
+            $cancelled = get_post_meta( $order_id, '_commissions_cancelled', true );
 
-			// Ensure the order have commissions processed
-			$processed = get_post_meta( $order_id, '_commissions_processed', true );
-			$cancelled = get_post_meta( $order_id, '_commissions_cancelled', true );
+            if( ( empty( $cancelled ) || $cancelled != 'no' ) ){
+                $processed = $this->register_commissions_status( $order_id, 'cancelled' );
 
-			if ( $processed && $processed == 'yes' && ( empty( $cancelled ) || $cancelled != 'no' ) ) {
-				$order = wc_get_order( $order_id );
-
-				foreach ( $order->get_items() as $item_id => $item ) {
-					if ( empty( $item['commission_id'] ) ) {
-						continue;
-					}
-
-					// retrieve commission
-					$commission = YITH_Commission( intval( $item['commission_id'] ) );
-
-					// set commission as refunded
-					$commission->update_status( 'cancelled' );
-					$commission->save_data();
-
-					// Mark commissions as processed
-					update_post_meta( $order_id, '_commissions_cancelled', 'yes' );
-				}
-			}
+                if( $processed ){
+                    update_post_meta( $order_id, '_commissions_cancelled', 'yes' );
+                }
+            }
 		}
 
 		/**
@@ -1136,26 +1119,7 @@ if ( ! class_exists( 'YITH_Commissions' ) ) {
 		 * @since 1.0
 		 */
 		public function register_commissions_pending( $order_id ) {
-
-			// Ensure the order have commissions processed
-			$processed = get_post_meta( $order_id, '_commissions_processed', true );
-
-			if ( $processed && $processed == 'yes' ) {
-				$order = wc_get_order( $order_id );
-
-				foreach ( $order->get_items() as $item_id => $item ) {
-					if ( empty( $item['commission_id'] ) ) {
-						continue;
-					}
-
-					// retrieve commission
-					$commission = YITH_Commission( intval( $item['commission_id'] ) );
-
-					// set commission as refunded
-					$commission->update_status( 'pending' );
-					$commission->save_data();
-				}
-			}
+            $this->register_commissions_status( $order_id, 'pending' );
 		}
 
 		/**

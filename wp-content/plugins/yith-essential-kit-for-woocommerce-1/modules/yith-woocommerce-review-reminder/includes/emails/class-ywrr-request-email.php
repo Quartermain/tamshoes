@@ -82,7 +82,8 @@ if ( ! class_exists( 'YWRR_Request_Mail' ) ) {
 		 */
 		public function trigger( $order_id, $item_list, $days_ago, $test_email = '', $template = false ) {
 
-			$lang = get_post_meta( $order_id, 'wpml_language', true );
+			$this->object = wc_get_order( $order_id );
+			$lang         = yit_get_prop( $this->object, 'wpml_language', true );
 
 			$this->email_type    = get_option( 'ywrr_mail_type' );
 			$this->heading       = apply_filters( 'wpml_translate_single_string', get_option( 'ywrr_mail_subject' ), 'admin_texts_ywrr_mail_subject', 'ywrr_mail_subject', $lang );
@@ -93,10 +94,11 @@ if ( ! class_exists( 'YWRR_Request_Mail' ) ) {
 
 			$this->find['site-title']    = '{site_title}';
 			$this->replace['site-title'] = $this->get_blogname();
+			$this->find['order-id']      = '{order_id}';
+			$this->replace['order-id']   = $order_id;
 
 			if ( $order_id ) {
 
-				$this->object    = wc_get_order( $order_id );
 				$this->recipient = yit_get_prop( $this->object, 'billing_email' );
 
 			} else {

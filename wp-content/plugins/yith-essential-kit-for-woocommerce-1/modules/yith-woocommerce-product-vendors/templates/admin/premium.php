@@ -8,7 +8,7 @@
  * http://www.gnu.org/licenses/gpl-3.0.txt
  */
 ?>
-
+ciao
 <style>
     .section {
         margin-left: -20px;
@@ -932,6 +932,22 @@
             </div>
             <div class="col-1">
                 <img src="<?php echo YITH_WPV_URL ?>assets/images/39.png" alt="Screenshot"/>
+            </div>
+        </div>
+    </div>
+    <div class="section section-even clear"style="background: url(<?php echo YITH_WPV_URL ?>assets/images/43-bg.png) no-repeat #fff; background-position: 85% 100%">
+        <div class="landing-container">
+            <div class="col-1">
+                <img src="<?php echo YITH_WPV_URL ?>assets/images/43.png" alt="Screenshot"/>
+            </div>
+            <div class="col-2">
+                <div class="section-title">
+                    <img src="<?php echo YITH_WPV_URL ?>assets/images/43-icon.png" alt="icon"/>
+                    <h2><?php _e('User switch','yith_wc_product_vendors'); ?></h2>
+                </div>
+                <p>
+                    <?php _e( 'Thanks to this feature, you can access the dashboard of your site as a vendor. This allows having the same view vendors registered on your store have and verifying any notified issue ','yith_wc_product_vendors' )?>
+                </p>
             </div>
         </div>
     </div>

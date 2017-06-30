@@ -289,14 +289,21 @@ if ( ! class_exists( 'YITH_Commissions_List_Table' ) ) {
                     break;
 
                 case 'line_item':
-                    $product     = $rec->get_item();
-
-                    if( ! $product ){
-                        return '<small class="meta">-</small>';
+                    $to_return = '<small class="meta">-</small>';
+                    if( 'shipping' == $rec->type ){
+                        $shipping_fee = _x( 'Shipping fee', '[admin]: commission type', 'yith-woocommerce-product-vendors' );
+                        $to_return = "<strong>{$shipping_fee}</strong>";
                     }
 
-                    $product_url = apply_filters( 'yith_wcmv_commissions_list_table_product_url', get_edit_post_link( $product['product_id'] ), $product, $rec );
-                    return ! empty( $product_url ) ? "<a target='_blank' href='{$product_url}'><strong>{$product['name']}</strong></a>" : "<strong>{$product['name']}</strong>";
+                    else {
+                        $product = $rec->get_item();
+
+                        if( $product ){
+                            $product_url = apply_filters( 'yith_wcmv_commissions_list_table_product_url', get_edit_post_link( $product['product_id'] ), $product, $rec );
+                            $to_return = ! empty( $product_url ) ? "<a target='_blank' href='{$product_url}'><strong>{$product['name']}</strong></a>" : "<strong>{$product['name']}</strong>";;
+                        }
+                    }
+                    return $to_return;
                     break;
 
                 case 'rate':

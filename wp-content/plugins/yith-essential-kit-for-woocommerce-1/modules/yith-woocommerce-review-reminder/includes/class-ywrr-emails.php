@@ -129,11 +129,15 @@ if ( ! class_exists( 'YWRR_Emails' ) ) {
 
 			$items = array();
 
+			if ( apply_filters( 'ywrr_comment_status', true ) ) {
+				$comment_status = "AND c.comment_status = 'open'";
+			}
+			
 			$line_items = $wpdb->get_results( $wpdb->prepare( "
                     SELECT    a.order_item_name,
                               MAX(CASE WHEN b.meta_key = '_product_id' THEN b.meta_value ELSE NULL END) AS product_id
                     FROM      {$wpdb->prefix}woocommerce_order_items a INNER JOIN {$wpdb->prefix}woocommerce_order_itemmeta b ON a.order_item_id = b.order_item_id INNER JOIN {$wpdb->prefix}posts c ON  b.meta_value = c.ID
-                    WHERE     a.order_id = %d AND a.order_item_type = 'line_item' AND c.comment_status = 'open'
+                    WHERE     a.order_id = %d AND a.order_item_type = 'line_item' {$comment_status}
                     GROUP BY  a.order_item_name
                     ORDER BY  a.order_item_id ASC
                     ", $order_id ) );
@@ -163,8 +167,9 @@ if ( ! class_exists( 'YWRR_Emails' ) ) {
 		public function items_has_comments_closed( $product_id ) {
 
 			$product = get_post( $product_id );
+			$closed  = is_object( $product ) ? ( $product->comment_status == 'closed' ) : false;
 
-			return is_object( $product ) ? ( $product->comment_status == 'closed' ) : false;
+			return apply_filters( 'ywrr_comment_status', $closed );
 
 		}
 

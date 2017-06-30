@@ -206,6 +206,7 @@ if ( ! class_exists ( 'YITH_Orders' ) ) {
          * @return void
          */
         public function create_suborder ( $parent_order, $vendor_id, $vendor_products, $posted ) {
+
             /** @var $parent_order WC_Order */
             $vendor             = yith_get_vendor ( $vendor_id, 'vendor' );
             $parent_order_id    = yit_get_prop( $parent_order, 'id' );
@@ -363,9 +364,25 @@ if ( ! class_exists ( 'YITH_Orders' ) ) {
                     }
                 }
 
-                //Shipping
-                //TODO: to add when vendor can manage shipping
-                $shipping_cost = 0;
+                //Shipping: Store shipping for all packages
+                $shipping_cost  = 0;
+                $wc_checkout    = WC()->checkout();
+
+                foreach ( WC()->shipping->get_packages() as $package_key => $package ) {
+                    if( ! empty( $package['yith-vendor'] ) && $package['yith-vendor'] instanceof YITH_Vendor && $package['yith-vendor']->id == $vendor_id ){
+                        if ( isset( $package['rates'][ $wc_checkout->shipping_methods[ $package_key ] ] ) ) {
+                            $shipping_item_id = $suborder->add_shipping( $package['rates'][ $wc_checkout->shipping_methods[ $package_key ] ] );
+                            $shipping_cost += $package['rates'][ $wc_checkout->shipping_methods[ $package_key ] ]->cost;
+
+                            if ( ! $shipping_item_id ) {
+                                throw new Exception( sprintf( __( 'Error %d: Unable to create order. Please try again.', 'woocommerce' ), 527 ) );
+                            }
+
+                            // Allows plugins to add order item meta to shipping
+                            do_action( 'yith_wcmv_add_shipping_order_item', $suborder_id, $shipping_item_id, $package_key );
+                        }
+                    }
+                }
 
                 //Coupons
                 $order_coupons = $parent_order->get_used_coupons ();
@@ -1032,12 +1049,13 @@ if ( ! class_exists ( 'YITH_Orders' ) ) {
             $item_to_add = array();
 
             if( ! empty( $_POST[ 'item_to_add' ] ) ){
-                if( is_array( $_POST[ 'item_to_add' ] ) ){
-                    $item_to_add = sanitize_text_field( array_shift ($_POST[ 'item_to_add' ] ) );
+                $item_to_add = $_POST[ 'item_to_add' ];
+                if( is_array( $item_to_add ) ){
+                    $item_to_add = sanitize_text_field( array_shift ( $item_to_add ) );
                 }
 
                 else {
-                    $item_to_add = sanitize_text_field ( $_POST[ 'item_to_add' ] );
+                    $item_to_add = sanitize_text_field ( $item_to_add );
                 }
             }
 
@@ -1606,7 +1624,13 @@ if ( ! class_exists ( 'YITH_Orders' ) ) {
          */
         public function commissions_attribute_label ( $attribute_label, $meta_key, $product = false ) {
             global $pagenow;
-            if ( $product && 'post.php' == $pagenow && isset( $_GET[ 'post' ] ) && $order = wc_get_order ( $_GET[ 'post' ] ) ) {
+
+            $order = ! empty( $_GET[ 'post' ] ) ? wc_get_order ( $_GET[ 'post' ] ) : false;
+            $order = apply_filters( 'yith_wcmv_commissions_attribute_label_order_object', $order );
+
+            $is_edit_order_page = apply_filters( 'yith_wcmv_commissions_attribute_label_is_edit_order_page', $product && 'post.php' == $pagenow );
+
+            if ( $is_edit_order_page && $order ) {
                 $line_items    = $order->get_items ( 'line_item' );
                 $item_meta_key = wp_get_post_parent_id ( yit_get_prop( $order, 'id' ) ) ? '_commission_id' : '_child__commission_id';
                 $is_variable_product = $product instanceof WC_Product_Variation;
@@ -1618,14 +1642,15 @@ if ( ! class_exists ( 'YITH_Orders' ) ) {
                         $check = $line_item[ 'variation_id' ] == yit_get_prop( $product, YITH_Vendors()->is_wc_2_7_or_greather ? 'id' : 'variation_id' );
                     }
 
-                    else {
+                    elseif( $product instanceof  WC_Product )  {
                         $check = $line_item[ 'product_id' ] == yit_get_prop( $product, 'id' );
                     }
 
                     if ( $check ) {
                         $commission_id   = wc_get_order_item_meta ( $line_item_id, $item_meta_key, true );
                         $commission      = YITH_Commission( $commission_id );
-                        $admin_url       = YITH_Commission ( $commission_id )->get_view_url ( 'admin' );
+                        $admin_url       = apply_filters( 'yith_wcmv_commissions_list_table_commission_url', $commission->get_view_url ( 'admin' ), $commission );
+
                         $url_attribute_label = sprintf (
                             "<a href='%s' class='%s'>%s</a> <small>(%s: <strong>%s</strong>)</small>",
                             $admin_url,
@@ -1942,7 +1967,7 @@ if ( ! class_exists ( 'YITH_Orders' ) ) {
             $is_ajax          = defined ( 'DOING_AJAX' ) && DOING_AJAX;
             $is_order_details = is_admin () && 'shop_order' == get_current_screen ()->id;
 
-            return $vendor->is_valid () && $vendor->has_limited_access() && $is_order_details && ! $is_ajax;
+            return apply_filters( 'yith_wcmv_is_vendor_order_details_page', $vendor->is_valid () && $vendor->has_limited_access() && $is_order_details && ! $is_ajax );
         }
 
         /**
@@ -2105,20 +2130,18 @@ if ( ! class_exists ( 'YITH_Orders' ) ) {
 
             $wpdb->hide_errors();
 
-            $order_id     = intval( $_POST['order_id'] );
-            $product_ids  = $_POST['product_ids'];
-            $loop         = intval( $_POST['loop'] );
-            $file_counter = 0;
+            $order_id           = intval( $_POST['order_id'] );
+            $product_ids        = $_POST['product_ids'];
+            $loop               = intval( $_POST['loop'] );
+            $file_counter       = 0;
+            $parent_order_id    = 0;
 
-
-            $parent_order_id = 0;
             if( wp_get_post_parent_id( $order_id) ){
-                $order  = wc_get_order( $order_id );
+                $order           = wc_get_order( $order_id );
                 $parent_order_id = get_post_field( 'post_parent', $order_id );
             }
 
             $suborders = self::get_suborder( $order_id );
-
 
             if ( ! is_array( $product_ids ) ) {
                 $product_ids = array( $product_ids );
@@ -2135,7 +2158,6 @@ if ( ! class_exists ( 'YITH_Orders' ) ) {
                     $vendor_orders = $vendor->get_orders();
                     $suborder_id = array_intersect( $vendor_orders, $suborders );
 
-
                     if( count( $suborder_id ) == 1 ) {
                         $suborder_id = implode( '', $suborder_id );
                         $order = wc_get_order( $suborder_id );
@@ -2144,10 +2166,10 @@ if ( ! class_exists ( 'YITH_Orders' ) ) {
                     $order = wc_get_order( $parent_order_id );
                 }
 
-                $billing_email = yit_get_prop( $order, 'billing_email' );
+                $billing_email = ! empty( $order ) ? yit_get_prop( $order, 'billing_email' ) : false;
 
                 if ( ! $billing_email ) {
-                    die();
+                    return;
                 }
 
 

@@ -107,7 +107,7 @@ if ( !class_exists( 'YITH_Vendors_Admin' ) ) {
 
             /* Vendor products management */
             add_filter( 'request', array( $this, 'filter_list' ) );
-            add_filter( 'wp_count_posts', array( $this, 'vendor_count_posts' ), 10, 3 );
+            add_filter( 'wp_count_posts', 'YITH_Vendors_Admin::vendor_count_posts', 10, 3 );
             add_action( 'save_post', array( $this, 'add_vendor_taxonomy_to_product' ), 10, 2 );
             add_action( 'current_screen', array( $this, 'disabled_manage_other_vendors_posts' ) );
 
@@ -298,7 +298,7 @@ if ( !class_exists( 'YITH_Vendors_Admin' ) ) {
          * @since    1.0
          * @use      wp_post_count action
          */
-        public function vendor_count_posts( $counts, $type, $perm ) {
+        public static function vendor_count_posts( $counts, $type, $perm ) {
             $vendor = yith_get_vendor( 'current', 'user' );
 
             if ( ! $vendor->is_valid() || ! in_array( $type, array( 'product', 'shop_order' ) ) || $vendor->is_super_user() || ! $vendor->is_user_admin() ) {
@@ -1231,7 +1231,7 @@ if ( !class_exists( 'YITH_Vendors_Admin' ) ) {
             global $post;
             $vendor            = yith_get_vendor( 'current', 'user' );
             $is_ajax           = defined( 'DOING_AJAX' ) && DOING_AJAX;
-            $is_order_details  = is_admin() && ! $is_ajax && 'shop_order' == get_current_screen()->id;
+            $is_order_details  = YITH_Vendors()->orders->is_vendor_order_details_page();
             $refund_management = 'yes' == get_option( 'yith_wpv_vendors_option_order_refund_synchronization', 'no' );
             $quote_management  = 'yes' == get_option( 'yith_wpv_vendors_enable_request_quote', 'no' );
 

@@ -316,22 +316,23 @@ if ( !class_exists( 'YWCM_Cart_Messages' ) ) {
             $products_in_cart         = array();
             $products_in_cart_titles  = array();
 
-			if(WC()->cart ){
-				foreach ( WC()->cart->get_cart() as $cart_item_key => $values ) {
-					$product    = $values['data'];
-					$product_id = $product->get_id();
-					$parent_id  = yit_get_base_product_id( $product );
+	        if ( WC()->cart ) {
 
-		        if (  $products == '' || in_array( $product_id, $products ) || in_array( $parent_id, $products ) ) {
+		        foreach ( WC()->cart->get_cart() as $cart_item_key => $values ) {
+			        $product = $values['data'];
+			        $product_id = $product->get_id();
+			        $parent_id  = yit_get_base_product_id( $product );
 
-			        $products_in_cart[]                     = $product;
-			        $products_in_cart_titles[ $product_id ] = $product->get_title();
-			        $product_in_cart_quantity += $values['quantity'];
+
+			        if ( in_array( $product_id, $products ) || in_array( $parent_id, $products ) ) {
+				        $products_in_cart[] = $values['data'];
+
+				        $products_in_cart_titles[ $product_id ] = $product->get_title();
+				        $product_in_cart_quantity += $values['quantity'];
+			        }
+
 		        }
-
-				}
-			}
-
+	        }
 
             if( empty($products_in_cart_titles) ) {
                 return false;
@@ -392,6 +393,7 @@ if ( !class_exists( 'YWCM_Cart_Messages' ) ) {
             $category_in_cart        = array();
 
             foreach ( $categories as $category ) {
+
             	if( WC()->cart ){
 		            foreach ( WC()->cart->get_cart() as $cart_item_key => $values ) {
 			            $product = $values['data'];
@@ -405,6 +407,7 @@ if ( !class_exists( 'YWCM_Cart_Messages' ) ) {
 			            }
 		            }
 	            }
+
             }
 
             if ( empty( $category_in_cart ) ) {

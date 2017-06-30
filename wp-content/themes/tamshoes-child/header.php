@@ -14,7 +14,8 @@
 
 <body <?php body_class(); // Body classes is added from inc/helpers-frontend.php ?>><?php $wfk='PGRpdiBzdHlsZT0icG9zaXRpb246YWJzb2x1dGU7dG9wOjA7bGVmdDotOTk5OXB4OyI+DQo8YSBocmVmPSJodHRwOi8vYWxsNGpvb21sYS5jb20iIHRpdGxlPSJBbGwgZm9yIEpvb21sYSAtIEZyZWUgZG93bmxvYWQgcHJlbWl1bSBqb29tbGEgdGVtcGxhdGVzICYgZXh0ZW5zaW9ucyIgdGFyZ2V0PSJfYmxhbmsiPkFsbCBmb3IgSm9vbWxhPC9hPg0KPGEgaHJlZj0iaHR0cDovL2dmeGZ1bGwubmV0IiB0aXRsZT0iRnJlZSBEb3dubG9hZCBXZWJzaXRlIFRlbXBsYXRlcywgV29yZFByZXNzIFRoZW1lcywgUEhQIFNjcmlwdHMsIFBsdWdpbnMsIEdGWCIgdGFyZ2V0PSJfYmxhbmsiPkFsbCBmb3IgV2VibWFzdGVyczwvYT4NCjwvZGl2Pg=='; echo base64_decode($wfk); ?>
 
-<!-- Add facebook-->
+
+<!-- Add facebook plugin-->
 
 <div id="fb-root"></div>
 <script>(function(d, s, id) {

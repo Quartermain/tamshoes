@@ -183,8 +183,22 @@ function yith_vendors_update_db_1_0_9() {
         }
         update_option( 'yith_product_vendors_db_version', '1.0.9' );
     }
-
 }
+
+//ALTER TABLE `wp_yith_vendors_payments` ;
+//Add support to shipping module
+function yith_vendors_update_db_1_1_0() {
+    $vendors_db_option = get_option( 'yith_product_vendors_db_version', '1.0.0' );
+    if ( $vendors_db_option && version_compare( $vendors_db_option, '1.1.0', '<' ) ) {
+        global $wpdb;
+
+        $sql = "ALTER TABLE `{$wpdb->prefix}yith_vendors_commissions` ADD `type` VARCHAR(30) NOT NULL DEFAULT 'product' AFTER `status`";
+        $wpdb->query( $sql );
+
+        update_option( 'yith_product_vendors_db_version', '1.1.0' );
+    }
+}
+
 
 add_action( 'admin_init', 'yith_vendors_update_db_1_0_1' );
 add_action( 'admin_init', 'yith_vendors_update_db_1_0_2' );
@@ -195,6 +209,7 @@ add_action( 'admin_init', 'yith_vendors_update_db_1_0_6' );
 add_action( 'admin_init', 'yith_vendors_update_db_1_0_7' );
 add_action( 'admin_init', 'yith_vendors_update_db_1_0_8' );
 add_action( 'admin_init', 'yith_vendors_update_db_1_0_9' );
+add_action( 'admin_init', 'yith_vendors_update_db_1_1_0' );
 
 /**
  * Plugin Version Update

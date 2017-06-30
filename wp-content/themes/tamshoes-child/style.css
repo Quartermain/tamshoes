@@ -11,11 +11,11 @@ Version: 3.0
 /* Start font face*/
 @font-face {
     font-family: 'icomoon';
-    src:  url('font-icon/fonts/icomoon.eot?o7vwdo');
-    src:  url('font-icon/fonts/icomoon.eot?o7vwdo#iefix') format('embedded-opentype'),
-    url('font-icon/fonts/icomoon.ttf?o7vwdo') format('truetype'),
-    url('font-icon/fonts/icomoon.woff?o7vwdo') format('woff'),
-    url('font-icon/fonts/icomoon.svg?o7vwdo#icomoon') format('svg');
+    src:  url('font-icon/fonts/icomoon.eot?kknc4z');
+    src:  url('font-icon/fonts/icomoon.eot?kknc4z#iefix') format('embedded-opentype'),
+    url('font-icon/fonts/icomoon.ttf?kknc4z') format('truetype'),
+    url('font-icon/fonts/icomoon.woff?kknc4z') format('woff'),
+    url('font-icon/fonts/icomoon.svg?kknc4z#icomoon') format('svg');
     font-weight: normal;
     font-style: normal;
 }
@@ -38,27 +38,57 @@ Version: 3.0
 .tamshoes-icon_bupbe:before {
     content: "\e900";
 }
-.tamshoes-icon_caogot .path1:before {
+.tamshoes-icon_caogot:before {
     content: "\e901";
-    color: rgb(255, 255, 255);
 }
-.tamshoes-icon_caogot .path2:before {
+.tamshoes-icon_dep:before {
     content: "\e902";
-    margin-left: -1em;
-    color: rgb(0, 0, 0);
 }
 .tamshoes-icon_sandan:before {
     content: "\e903";
 }
+.tamshoes-newspaper:before {
+    content: "\e904";
+}
+.tamshoes-bullhorn:before {
+    content: "\e91a";
+}
+.tamshoes-phone:before {
+    content: "\e942";
+}
+.tamshoes-users:before {
+    content: "\e972";
+}
+
+
+
 
 
 /* End Font face */
 
 .size-icon-menu {
-    font-size: 30px !important;
+    font-size: 25px !important;
     margin-right: 5px;
 }
 
+li.new-item {
+    background: #EC008C !important;
+}
+
+li.new-item a{
+    color: #fff !important;
+    padding-left: 10px;
+    padding-right: 10px;
+    line-height: 44px !important;
+}
+
+.color-primary {
+    color: #EC008C !important;
+}
+
+.tinhsize {
+    margin-bottom: 15px;
+}
 
 @media only screen and (max-width: 48em) {
 /*************** ADD MOBILE ONLY CSS HERE  ***************/

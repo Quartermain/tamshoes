@@ -13,6 +13,8 @@ if ( ! defined ( 'ABSPATH' ) ) {
 
 if ( ! class_exists ( 'YITH_Vendor' ) ) {
 
+    //@TODO: Add shipping property
+
     /**
      * The main class for the Vendor
      *
@@ -121,7 +123,7 @@ if ( ! class_exists ( 'YITH_Vendor' ) ) {
 
                 $terms = wp_get_post_terms ( $vendor, self::$taxonomy );
 
-                if ( empty( $terms ) ) {
+                if ( empty( $terms ) || is_wp_error( $terms ) ) {
                     return self::_instance ();
                 }
 
@@ -772,6 +774,10 @@ if ( ! class_exists ( 'YITH_Vendor' ) ) {
          * @return array The review average and the product with reviews count
          */
         public function get_reviews_average_and_product () {
+            if( 'no' == get_option( 'yith_wpv_vendor_show_average_ratings' ) ){
+                return array();
+            }
+
             $response = apply_filters ( 'yith_wcmv_reviews_average_and_product', array (), $this );
 
             if ( ! empty( $response ) ) {

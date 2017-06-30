@@ -98,6 +98,14 @@ if ( ! class_exists( 'YITH_Vendors' ) ) {
 		public $orders = null;
 
 		/**
+		 * Main Shipping Class
+		 *
+		 * @var YITH_Vendor_Shipping
+		 * @since 1.9.17
+		 */
+		public $shipping = null;
+
+		/**
 		 * Required classes
 		 *
 		 * @var YITH_Orders | YITH_Orders_Premium
@@ -170,7 +178,7 @@ if ( ! class_exists( 'YITH_Vendors' ) ) {
 		 */
 		public function __construct() {
 			/* === Main Classes to Load === */
-			$require = apply_filters( 'yith_wcpv_require_class',
+			$this->require = $require = apply_filters( 'yith_wcpv_require_class',
 				array(
 					'common' => array(
                         'includes/functions.yith-update.php',

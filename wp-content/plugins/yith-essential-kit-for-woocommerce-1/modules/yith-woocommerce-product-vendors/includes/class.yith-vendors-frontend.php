@@ -78,7 +78,7 @@ if ( ! class_exists( 'YITH_Vendors_Frontend' ) ) {
          * @author Andrea Grillo <andrea.grillo@yithemes.com>
          */
         public function is_vendor_page() {
-            return is_tax( YITH_Vendors()->get_taxonomy_name() );
+            return apply_filters( 'yith_wcmv_is_vendor_page', is_tax( YITH_Vendors()->get_taxonomy_name() ) );
         }
 
         /**
