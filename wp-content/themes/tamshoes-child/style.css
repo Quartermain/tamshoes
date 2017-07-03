@@ -61,9 +61,6 @@ Version: 3.0
 }
 
 
-
-
-
 /* End Font face */
 
 .size-icon-menu {
@@ -92,6 +89,15 @@ li.new-item a{
 
 abbr[title]{
     color: red;
+}
+
+.category-page-row .product-categories .active > a,
+.category-page-row .product-categories .active i{
+    color: #EC008C;
+}
+
+.category-page-row .product-categories .active .children {
+    border-left-color: #EC008C;
 }
 
 @media only screen and (max-width: 48em) {

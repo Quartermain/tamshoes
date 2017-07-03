@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2017-06-30 12:25+0000\n"
+"PO-Revision-Date: 2017-07-03 03:23+0000\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -9,7 +9,7 @@ msgstr ""
 "Language: vi\n"
 "Project-Id-Version: Plugins - WooCommerce - Stable (latest release)\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-06-30 11:45+0000\n"
+"POT-Creation-Date: 2017-07-03 02:56+0000\n"
 "Last-Translator: trung nguyen quang <trungqt2005@gmail.com>\n"
 "Language-Team: Vietnamese"
 
@@ -5373,12 +5373,6 @@ msgid_plural "On hold <span class=\"count\">(%s)</span>"
 msgstr[0] ""
 msgstr[1] ""
 
-#: includes/class-wc-query.php:113
-#: includes/gateways/bacs/class-wc-gateway-bacs.php:123
-#: includes/wc-account-functions.php:101
-msgid "Account details"
-msgstr "Chi tiết tài khoản"
-
 #: includes/cli/class-wc-cli-rest-command.php:314
 msgid ""
 "Make sure to include the --user flag with an account that has permissions "
@@ -5805,7 +5799,7 @@ msgstr ""
 #: includes/shipping/flat-rate/includes/settings-flat-rate.php:17
 #: includes/shipping/legacy-flat-rate/includes/settings-flat-rate.php:23
 msgid "Flat rate"
-msgstr ""
+msgstr "Tỷ lệ cố định"
 
 #: includes/shipping/flat-rate/includes/settings-flat-rate.php:14
 #: includes/shipping/legacy-flat-rate/includes/settings-flat-rate.php:20
@@ -5900,7 +5894,7 @@ msgstr ""
 #: includes/shipping/local-pickup/class-wc-shipping-local-pickup.php:26
 #: includes/shipping/local-pickup/class-wc-shipping-local-pickup.php:77
 msgid "Local pickup"
-msgstr ""
+msgstr "Địa phương"
 
 #: includes/shortcodes/class-wc-shortcode-checkout.php:99
 msgid "Please log in to your account below to continue to the payment form."
@@ -5977,12 +5971,6 @@ msgstr ""
 msgid "Search results: &ldquo;%s&rdquo;"
 msgstr ""
 
-#: includes/wc-template-functions.php:1175
-#: templates/checkout/form-shipping.php:63
-#: templates/single-product/tabs/additional-information.php:25
-msgid "Additional information"
-msgstr ""
-
 #. translators: 1: rating 2: rating count
 #: includes/wc-template-functions.php:2617
 msgid "Rated %1$s out of 5 based on %2$s customer rating"
@@ -6009,7 +5997,7 @@ msgstr ""
 
 #: includes/widgets/class-wc-widget-layered-nav-filters.php:29
 msgid "Active filters"
-msgstr ""
+msgstr "Bộ lọc hoạt động"
 
 #: includes/widgets/class-wc-widget-layered-nav.php:25
 msgid "WooCommerce layered nav"
@@ -6061,7 +6049,7 @@ msgstr ""
 
 #: includes/widgets/class-wc-widget-recently-viewed.php:29
 msgid "Recently viewed products"
-msgstr ""
+msgstr "Các sản phẩm vừa xem"
 
 #: includes/widgets/class-wc-widget-top-rated-products.php:27
 msgid "WooCommerce top rated products"
@@ -6154,10 +6142,6 @@ msgstr ""
 
 #: templates/order/order-details.php:31
 msgid "Order details"
-msgstr ""
-
-#: templates/single-product/related.php:27
-msgid "Related products"
 msgstr ""
 
 #: templates/single-product/review-meta.php:28
@@ -20959,6 +20943,12 @@ msgstr "Đơn hàng (trang %d)"
 msgid "Order #%s"
 msgstr "Đơn hàng #%s"
 
+#: includes/class-wc-query.php:113
+#: includes/gateways/bacs/class-wc-gateway-bacs.php:123
+#: includes/wc-account-functions.php:101
+msgid "Account details"
+msgstr "Chi tiết tài khoản"
+
 #: includes/class-wc-shipping-zone.php:141
 msgid "%s and %d other region"
 msgid_plural "%s and %d other regions"
@@ -23206,6 +23196,12 @@ msgstr "Thứ tự theo giá: thấp đến cao"
 msgid "Sort by price: high to low"
 msgstr "Thứ tự theo giá: cao xuống thấp"
 
+#: includes/wc-template-functions.php:1175
+#: templates/checkout/form-shipping.php:63
+#: templates/single-product/tabs/additional-information.php:25
+msgid "Additional information"
+msgstr "Thông tin thêm"
+
 #: includes/wc-template-functions.php:1184
 msgid "Reviews (%d)"
 msgstr "Đánh giá (%d)"
@@ -24035,6 +24031,10 @@ msgid "%s customer review"
 msgid_plural "%s customer reviews"
 msgstr[0] "%s đánh giá của khách hàng"
 msgstr[1] ""
+
+#: templates/single-product/related.php:27
+msgid "Related products"
+msgstr "Sản phẩm tương tự"
 
 #: templates/single-product/review-meta.php:36
 msgid "verified owner"
