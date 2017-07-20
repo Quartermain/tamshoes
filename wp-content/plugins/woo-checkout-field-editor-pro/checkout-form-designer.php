@@ -3,7 +3,7 @@
  * Plugin Name: Woo Checkout Field Editor Pro
  * Description: Customize WooCommerce checkout fields(Add, Edit, Delete and re-arrange fields).
  * Author:      ThemeHiGH
- * Version:     1.1.9
+ * Version:     1.2.0
  * Author URI:  https://www.themehigh.com
  * Plugin URI:  https://www.themehigh.com
  * Text Domain: thwcfd
@@ -92,23 +92,28 @@ if(is_woocommerce_active()) {
 	add_filter('woocommerce_enable_order_notes_field', 'thwcfd_enable_order_notes_field', 1000);
 		
 	function thwcfd_woo_default_address_fields( $original ) {
-		$sname = 'billing';
+		$sname = apply_filters('thwcfd_address_field_override_with', 'billing');
 		$address_fields = get_option('wc_fields_'.$sname);
 		
-		if(is_array($address_fields) && !empty($address_fields) && !empty($original)){	
-			foreach($original as $name => $ofield) {
-				$new_field = isset($address_fields[$sname.'_'.$name]) ? $address_fields[$sname.'_'.$name] : false;
-				$override_required = apply_filters( 'thwcfd_address_field_override_required', false );
+		if(is_array($address_fields) && !empty($address_fields) && !empty($original)){
+			$override_required = apply_filters( 'thwcfd_address_field_override_required', true );
 				
-				if($new_field && !( isset($new_field['enabled']) && $new_field['enabled'] == false )){
-					$original[$name]['required'] = isset($new_field['required']) ? $new_field['required'] : 0;
+			foreach($original as $name => $ofield) {
+				$fname = $sname.'_'.$name;
+				
+				if(thwcfd_is_locale_field($fname) && $override_required){
+					$new_field = isset($address_fields[$fname]) ? $address_fields[$fname] : false;
+					
+					if($new_field && !( isset($new_field['enabled']) && $new_field['enabled'] == false )){
+						$original[$name]['required'] = isset($new_field['required']) && $new_field['required'] ? true : false;
+					}
 				}
 			}
 		}
 		
 		return $original;
 	}	
-	//add_filter('woocommerce_default_address_fields' , 'thwcfd_woo_default_address_fields' );
+	add_filter('woocommerce_default_address_fields' , 'thwcfd_woo_default_address_fields' );
 	
 	function thwcfd_prepare_country_locale($fields) {
 		if(is_array($fields)){

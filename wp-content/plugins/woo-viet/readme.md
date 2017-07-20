@@ -5,7 +5,7 @@
 | Contributors | htdat |
 |Tags| WooCommerce Vietnam, vietnam, vietnamese, vietnam provinces, paypal for vietnam dong, vnd, vietnam dong, vietnam currency, vietnam customization |
 | Requires at least | 4.3 |
-| Tested up to | 4.7 |
+| Tested up to | 4.8 |
 | Stable tag | 1.3 |
 | License | GPLv2 or later |
 | License URI | https://www.gnu.org/licenses/gpl-2.0.html |
@@ -73,6 +73,11 @@ Follow these steps to install and use the plugin:
 4. Let clients know about the currency conversion before switching to the PayPal pages.
 
 ## Changelog
+
+### 1.3.1 - 2017.07.09
+* Improve the OnePay domestic gateway.
+* Add the plugin icon and banner.
+* Add the questionnaire after 4 weeks of installation.
 
 ### 1.3 - 2017.04.22
 * Add [the OnePay domestic (local ATM cards) gateway](http://onepay.com.vn/)

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<data>
+	<node>
+		<producttitle><![CDATA[Soflyy T-Shirt]]></producttitle>
+		<sku><![CDATA[999-X]]></sku>
+		<price><![CDATA[20]]></price>
+		<color><![CDATA[blue | red | white | orange]]></color>
+		<size><![CDATA[35 | 36 | 37 | 38]]></size>
+		<descriptionlong><![CDATA[Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature]]></descriptionlong>
+		<descriptionshort><![CDATA[simply dummy text of the printing and typesetting industry]]></descriptionshort>
+		<images><![CDATA[/wp-content/uploads/2017/06/19401960_817512311759455_238114053896488044_o.jpg | /wp-content/uploads/2017/06/19400591_818041238373229_7639670133064351931_o.jpg | /wp-content/uploads/2017/06/19388696_817512275092792_1646752555659696366_o.jpg]]></images>
+	</node>
+	<node>
+		<producttitle><![CDATA[Soflyy T-Shirt (blue)]]></producttitle>
+		<sku><![CDATA[999-B]]></sku>
+		<price><![CDATA[30]]></price>
+		<color><![CDATA[blue]]></color>
+		<size><![CDATA[35 | 36 | 37 | 38]]></size>
+		<descriptionlong><![CDATA[Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature]]></descriptionlong>
+		<descriptionshort><![CDATA[simply dummy text of the printing and typesetting industry]]></descriptionshort>
+		<images><![CDATA[/wp-content/uploads/2017/06/19401960_817512311759455_238114053896488044_o.jpg | /wp-content/uploads/2017/06/19400591_818041238373229_7639670133064351931_o.jpg | /wp-content/uploads/2017/06/19388696_817512275092792_1646752555659696366_o.jpg]]></images>
+	</node>
+	<node>
+		<producttitle><![CDATA[Soflyy T-Shirt (red)]]></producttitle>
+		<sku><![CDATA[999-C]]></sku>
+		<price><![CDATA[40]]></price>
+		<color><![CDATA[red]]></color>
+		<size><![CDATA[35 | 36 | 37 | 38]]></size>
+		<descriptionlong><![CDATA[Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature]]></descriptionlong>
+		<descriptionshort><![CDATA[simply dummy text of the printing and typesetting industry]]></descriptionshort>
+		<images><![CDATA[/wp-content/uploads/2017/06/19401960_817512311759455_238114053896488044_o.jpg | /wp-content/uploads/2017/06/19400591_818041238373229_7639670133064351931_o.jpg | /wp-content/uploads/2017/06/19388696_817512275092792_1646752555659696366_o.jpg]]></images>
+	</node>
+</data>

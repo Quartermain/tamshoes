@@ -97,16 +97,14 @@ class wcva_swatches_widget extends WP_Widget {
 
 		ob_start();
 		
-		?> 
-		 <br />
-	     <div class="widget-area wcva-filter-widget"> 
-		   <aside class="widget woocommerce widget_layered_nav wcva_layered_nav">
-		    
-            <h3 class="wcva_filter-widget-title"><?php echo $instance['wcva_widget_title']; ?>  <?php echo $instance['filter_attribute']; ?></h3>
+		?>
+	     <div class="widget-area wcva-filter-widget">
+		   <aside class="widget woocommerce widget_layered_nav wcva_layered_nav  clearfix">
+            <h3 class="wcva_filter-widget-title widget-title"><?php echo $instance['wcva_widget_title']; ?>  <?php echo $instance['filter_attribute']; ?></h3>
+            <div class="is-divider small"></div>
 		     <?php  $found = $this->wcva_layered_swatches( $terms, $taxonomy,$query_type); ?>
 		   </aside>
-		 </div> 
-         <br />	
+		 </div>
 		
 		<?php
 		

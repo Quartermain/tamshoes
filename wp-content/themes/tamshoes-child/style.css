@@ -1,3 +1,36 @@
+/** Magento Enterprise Edition  NOTICE OF LICENSE  This source file is subject to the Magento Enterprise Edition License that is bundled with this package in the file LICENSE_EE.txt. It is also available through the world-wide-web at this URL: http://www.magentocommerce.com/license/enterprise-edition If you did not receive a copy of the license and are unable to obtain it through the world-wide-web, please send an email to license@magentocommerce.com so we can send you a copy immediately.  DISCLAIMER  Do not edit or add to this file if you wish to upgrade Magento to newer versions in the future. If you wish to customize Magento for your needs please refer to http://www.magentocommerce.com for more information.  @category    design @package     rwd_default @copyright   Copyright (c) 2014 Magento Inc. (http://www.magentocommerce.com) @license     http://www.magentocommerce.com/license/enterprise-edition */
+/* Add effect https://codepen.io/Alex_onteractive/pen/JJZoRM*/
+* { margin: 0; padding: 0; }
+
+.hero-container ul, .hero-container li { list-style: none; }
+
+.hero-container { width: 100%; position: relative; /* Rectangle 2: */ }
+.hero-container onteractive_logo { position: relative; display: inline-block; z-index: 99; }
+.hero-container .logo-effect { position: relative; }
+.hero-container .logo-effect:after { content: ''; display: block; position: absolute; top: 180%; left: 0%; height: 20%; width: 100%; border-radius: 50%; background-color: #EC008C; opacity: .05; filter: blur(10px); mix-blend-mode: multiply; }
+.hero-container .logo-effect .diamonds .diamond { display: block; position: absolute; }
+.hero-container .logo-effect .diamonds .diamond:before, .hero-container .logo-effect .diamonds .diamond:after { position: absolute; content: ""; left: 5px; top: 0; width: 5px; height: 8px; background: #EC008C; -moz-border-radius: 5px 5px 0 0; border-radius: 5px 5px 0 0; -webkit-transform: rotate(-45deg); -moz-transform: rotate(-45deg); -ms-transform: rotate(-45deg); -o-transform: rotate(-45deg); transform: rotate(-45deg); -webkit-transform-origin: 0 100%; -moz-transform-origin: 0 100%; -ms-transform-origin: 0 100%; -o-transform-origin: 0 100%; transform-origin: 0 100%; }
+.hero-container .logo-effect .diamonds .diamond:after { left: 0; -webkit-transform: rotate(45deg); -moz-transform: rotate(45deg); -ms-transform: rotate(45deg); -o-transform: rotate(45deg); transform: rotate(45deg); -webkit-transform-origin: 100% 100%; -moz-transform-origin: 100% 100%; -ms-transform-origin: 100% 100%; -o-transform-origin: 100% 100%; transform-origin: 100% 100%; }
+.hero-container .logo-effect .diamonds .diamond:nth-child(1) { height: 26px; width: 26px; top: -56%; left: 33%; z-index: 101; animation: floatup 4.5s 1s linear infinite; opacity: 0; filter: blur(1.92px); }
+.hero-container .logo-effect .diamonds .diamond:nth-child(2) { height: 41px; width: 41px; top: -8%; left: 74%; z-index: 101; animation: floatup 2.9s 3.8s linear infinite; opacity: 0; filter: blur(1.84px); }
+.hero-container .logo-effect .diamonds .diamond:nth-child(3) { height: 52px; width: 52px; top: 45%; left: 33%; z-index: 101; animation: floatup 2.2s 2.5s linear infinite; opacity: 0; filter: blur(0.52px); }
+.hero-container .logo-effect .diamonds .diamond:nth-child(4) { height: 48px; width: 48px; top: 3%; left: 86%; z-index: 102; animation: floatup 3.2s 2.5s linear infinite; opacity: 0; filter: blur(1.6px); }
+.hero-container .logo-effect .diamonds .diamond:nth-child(5) { height: 26px; width: 26px; top: -56%; left: -3%; z-index: 101; animation: floatup 4.5s 3.1s linear infinite; opacity: 0; filter: blur(1.16px); }
+.hero-container .logo-effect .diamonds .diamond:nth-child(6) { height: 34px; width: 34px; top: 110%; left: 100%; z-index: 99; animation: floatup 2.3s 3.9s linear infinite; opacity: 0; filter: blur(1.2px); }
+.hero-container .logo-effect .diamonds .diamond:nth-child(7) { height: 53px; width: 53px; top: 119%; left: 107%; z-index: 101; animation: floatup 1.6s 1.9s linear infinite; opacity: 0; filter: blur(0.72px); }
+.hero-container .logo-effect .diamonds .diamond:nth-child(8) { height: 41px; width: 41px; top: -37%; left: -8%; z-index: 99; animation: floatup 4.3s 2.1s linear infinite; opacity: 0; filter: blur(0.56px); }
+.hero-container .logo-effect .diamonds .diamond:nth-child(9) { height: 32px; width: 32px; top: 52%; left: 1%; z-index: 100; animation: floatup 3.9s 1.4s linear infinite; opacity: 0; filter: blur(1.32px); }
+.hero-container .logo-effect .diamonds .diamond:nth-child(10) { height: 38px; width: 38px; top: -33%; left: 35%; z-index: 101; animation: floatup 1.9s 3.9s linear infinite; opacity: 0; filter: blur(0.32px); }
+.hero-container .logo-effect .diamonds .diamond:nth-child(11) { height: 50px; width: 50px; top: 115%; left: 25%; z-index: 100; animation: floatup 3.9s 1.1s linear infinite; opacity: 0; filter: blur(1.12px); }
+.hero-container .logo-effect .diamonds .diamond:nth-child(12) { height: 53px; width: 53px; top: -63%; left: -13%; z-index: 102; animation: floatup 3.2s 1.3s linear infinite; opacity: 0; filter: blur(1.96px); }
+.hero-container .logo-effect .diamonds .diamond:nth-child(13) { height: 44px; width: 44px; top: 95%; left: 73%; z-index: 99; animation: floatup 3s 2.4s linear infinite; opacity: 0; filter: blur(0.32px); }
+.hero-container .logo-effect .diamonds .diamond:nth-child(14) { height: 28px; width: 28px; top: -21%; left: 14%; z-index: 100; animation: floatup 1.7s 1.9s linear infinite; opacity: 0; filter: blur(1.36px); }
+.hero-container .logo-effect .diamonds .diamond:nth-child(15) { height: 41px; width: 41px; top: -45%; left: 27%; z-index: 100; animation: floatup 3s 1s linear infinite; opacity: 0; filter: blur(0.56px); }
+
+@keyframes floatup { 0% { transform: translateY(90%); opacity: 0; }
+  50% { transform: translateY(0%); opacity: 1; }
+  100% { transform: translateY(-40%); opacity: 0; } }
+/* end*/
 /*
 Theme Name: Tamshoes Child
 Description: This is a child theme for Flatsome Theme
@@ -5,107 +38,73 @@ Author: UX Themes
 Template: flatsome
 Version: 3.0
 */
-
 /*************** ADD CUSTOM CSS HERE.   ***************/
-
 /* Start font face*/
-@font-face {
-    font-family: 'icomoon';
-    src:  url('font-icon/fonts/icomoon.eot?kknc4z');
-    src:  url('font-icon/fonts/icomoon.eot?kknc4z#iefix') format('embedded-opentype'),
-    url('font-icon/fonts/icomoon.ttf?kknc4z') format('truetype'),
-    url('font-icon/fonts/icomoon.woff?kknc4z') format('woff'),
-    url('font-icon/fonts/icomoon.svg?kknc4z#icomoon') format('svg');
-    font-weight: normal;
-    font-style: normal;
-}
+@font-face { font-family: 'icomoon'; src: url("fonts/font-icon/fonts/icomoon.eot?kknc4z"); src: url("fonts/font-icon/fonts/icomoon.eot?kknc4z#iefix") format("embedded-opentype"), url("fonts/font-icon/fonts/icomoon.ttf?kknc4z") format("truetype"), url("fonts/font-icon/fonts/icomoon.woff?kknc4z") format("woff"), url("fonts/font-icon/fonts/icomoon.svg?kknc4z#icomoon") format("svg"); font-weight: normal; font-style: normal; }
+[class^="tamshoes-"], [class*=" tamshoes-"] { /* use !important to prevent issues with browser extensions that change fonts */ font-family: 'icomoon' !important; speak: none; font-style: normal; font-weight: normal; font-variant: normal; text-transform: none; line-height: 1; /* Better Font Rendering =========== */ -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
 
-[class^="tamshoes-"], [class*=" tamshoes-"] {
-    /* use !important to prevent issues with browser extensions that change fonts */
-    font-family: 'icomoon' !important;
-    speak: none;
-    font-style: normal;
-    font-weight: normal;
-    font-variant: normal;
-    text-transform: none;
-    line-height: 1;
+.tamshoes-icon_bupbe:before { content: "\e900"; }
 
-    /* Better Font Rendering =========== */
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-}
+.tamshoes-icon_caogot:before { content: "\e901"; }
 
-.tamshoes-icon_bupbe:before {
-    content: "\e900";
-}
-.tamshoes-icon_caogot:before {
-    content: "\e901";
-}
-.tamshoes-icon_dep:before {
-    content: "\e902";
-}
-.tamshoes-icon_sandan:before {
-    content: "\e903";
-}
-.tamshoes-newspaper:before {
-    content: "\e904";
-}
-.tamshoes-bullhorn:before {
-    content: "\e91a";
-}
-.tamshoes-phone:before {
-    content: "\e942";
-}
-.tamshoes-users:before {
-    content: "\e972";
-}
+.tamshoes-icon_dep:before { content: "\e902"; }
 
+.tamshoes-icon_sandan:before { content: "\e903"; }
+
+.tamshoes-newspaper:before { content: "\e904"; }
+
+.tamshoes-bullhorn:before { content: "\e91a"; }
+
+.tamshoes-phone:before { content: "\e942"; }
+
+.tamshoes-users:before { content: "\e972"; }
 
 /* End Font face */
+/*
+Theme Name: Tamshoes Child
+Description: This is a child theme for Flatsome Theme
+Author: UX Themes
+Template: flatsome
+Version: 3.0
+*/
+/*************** ADD CUSTOM CSS HERE.   ***************/
+/* Start font face*/
+@font-face { font-family: 'icomoon'; src: url("fonts/font-icon/fonts/icomoon.eot?kknc4z"); src: url("fonts/font-icon/fonts/icomoon.eot?kknc4z#iefix") format("embedded-opentype"), url("fonts/font-icon/fonts/icomoon.ttf?kknc4z") format("truetype"), url("fonts/font-icon/fonts/icomoon.woff?kknc4z") format("woff"), url("fonts/font-icon/fonts/icomoon.svg?kknc4z#icomoon") format("svg"); font-weight: normal; font-style: normal; }
+[class^="tamshoes-"], [class*=" tamshoes-"] { /* use !important to prevent issues with browser extensions that change fonts */ font-family: 'icomoon' !important; speak: none; font-style: normal; font-weight: normal; font-variant: normal; text-transform: none; line-height: 1; /* Better Font Rendering =========== */ -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
 
-.size-icon-menu {
-    font-size: 25px !important;
-    margin-right: 5px;
-}
+.tamshoes-icon_bupbe:before { content: "\e900"; }
 
-li.new-item {
-    background: #EC008C !important;
-}
+.tamshoes-icon_caogot:before { content: "\e901"; }
 
-li.new-item a{
-    color: #fff !important;
-    padding-left: 10px;
-    padding-right: 10px;
-    line-height: 44px !important;
-}
+.tamshoes-icon_dep:before { content: "\e902"; }
 
-.color-primary {
-    color: #EC008C !important;
-}
+.tamshoes-icon_sandan:before { content: "\e903"; }
 
-.tinhsize {
-    margin-bottom: 15px;
-}
+.tamshoes-newspaper:before { content: "\e904"; }
 
-abbr[title]{
-    color: red;
-}
+.tamshoes-bullhorn:before { content: "\e91a"; }
 
-.category-page-row .product-categories .active > a,
-.category-page-row .product-categories .active i{
-    color: #EC008C;
-}
+.tamshoes-phone:before { content: "\e942"; }
 
-.category-page-row .product-categories .active .children {
-    border-left-color: #EC008C;
-}
+.tamshoes-users:before { content: "\e972"; }
 
-.is-divider {
-    background-color: #EC008C;
-}
+/* End Font face */
+.size-icon-menu { font-size: 25px !important; margin-right: 5px; }
 
-@media only screen and (max-width: 48em) {
-/*************** ADD MOBILE ONLY CSS HERE  ***************/
+li.new-item { background: #EC008C !important; }
 
+li.new-item a { color: #fff !important; padding-left: 10px; padding-right: 10px; line-height: 44px !important; }
 
-}
+.color-primary { color: #EC008C !important; }
+
+.tinhsize { margin-bottom: 15px; }
+
+abbr[title] { color: red; }
+
+.category-page-row .product-categories .active > a, .category-page-row .product-categories .active i { color: #EC008C; font-weight: normal; }
+
+.category-page-row .product-categories .active .children { border-left-color: #EC008C; }
+
+.is-divider { background-color: #EC008C; }
+
+@media only screen and (max-width: 48em) { /*************** ADD MOBILE ONLY CSS HERE  ***************/ }
