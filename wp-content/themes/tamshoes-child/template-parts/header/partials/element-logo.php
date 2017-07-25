@@ -2,24 +2,6 @@
 
 <div class="hero-container">
     <div class="logo-effect">
-        <ul class="diamonds">
-
-            <li class="diamond"></li>
-            <li class="diamond"></li>
-            <li class="diamond"></li>
-            <li class="diamond"></li>
-            <li class="diamond"></li>
-            <li class="diamond"></li>
-            <li class="diamond"></li>
-            <li class="diamond"></li>
-            <li class="diamond"></li>
-            <li class="diamond"></li>
-            <li class="diamond"></li>
-            <li class="diamond"></li>
-            <li class="diamond"></li>
-            <li class="diamond"></li>
-            <li class="diamond"></li>
-        </ul>
         <a href="<?php echo esc_url(home_url('/')); ?>"
            title="<?php echo esc_attr(get_bloginfo('name', 'display')); ?> - <?php bloginfo('description'); ?>"
            rel="home">
@@ -36,6 +18,23 @@
             }
             ?>
         </a>
+        <ul class="diamonds">
+            <li class="diamond"></li>
+            <li class="diamond"></li>
+            <li class="diamond"></li>
+            <li class="diamond"></li>
+            <li class="diamond"></li>
+            <li class="diamond"></li>
+            <li class="diamond"></li>
+            <li class="diamond"></li>
+            <li class="diamond"></li>
+            <li class="diamond"></li>
+            <li class="diamond"></li>
+            <li class="diamond"></li>
+            <li class="diamond"></li>
+            <li class="diamond"></li>
+            <li class="diamond"></li>
+        </ul>
     </div>
 </div>
 <?php
